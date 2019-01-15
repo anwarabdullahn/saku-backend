@@ -7,7 +7,7 @@ const TransactionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'wallets'
     },
-    categories_id: {
+    category_id: {
         type: Schema.Types.ObjectId,
         ref: 'categories'
     },

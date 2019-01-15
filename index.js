@@ -14,17 +14,11 @@ app
     .use(bodyParser.json())
     .use(passport.initialize())
     .use(cors())
-    .use(
-        bodyParser.urlencoded({
-            extended: false
-        })
-    )
+    .use(bodyParser.urlencoded({extended: false}))
     .use('/api', routes)
     .listen(process.env.PORT, () => console.log(`Online at Port ${process.env.PORT}`));
 
 mongoose
-    .connect(process.env.MONGO_DB, {
-        useNewUrlParser: true
-    })
+    .connect(process.env.MONGO_DB, {useNewUrlParser: true})
     .then(() => console.log(`MongoDB Connected`))
     .catch((err) => console.log(err));

@@ -25,5 +25,7 @@ router.put('/category', privateRouter, CategoryController.Edit)
 router.delete('/category', privateRouter, CategoryController.Delete)
 router.post('/transaction', privateRouter, TransactionController.Store)
 router.get('/transaction', privateRouter, TransactionController.Get)
+router.put('/transaction', privateRouter, TransactionController.Edit)
+router.delete('/transaction', privateRouter, TransactionController.Delete)
 
 module.exports = router
