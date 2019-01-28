@@ -37,7 +37,7 @@ module.exports.Login = (req, res) => {
 
         !user ? res.status(404).json({
             success: false,
-            mas: `User not found`
+            msg: `User not found`
         }) :
         bcrypt.compare(password, user.password).then(match => {
             const payload = { id: user.id, email}

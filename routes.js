@@ -8,10 +8,12 @@ const
     CategoryController = require('./controllers/CategoryController'),
     TransactionController = require('./controllers/TransactionController')
 
-router.get('/', (req, res) => res.json({
-    success: true,
-    msg: 'Nice Work~'
-}))
+// router.get('/', (req, res) => res.send({
+//     success: true,
+//     msg: 'Nice Work~'
+// }))
+
+router.get('/', (req, res) => res.send('Hello World'))
 
 router.post('/register', AuthController.Register)
 router.post('/login', AuthController.Login)
