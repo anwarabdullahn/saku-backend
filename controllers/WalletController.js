@@ -10,15 +10,13 @@ module.exports.Store = (req, res) => {
         newWallet = new Wallet({ name, balance, user_id: req.user.id}),
         { errors, isValid } = Validation.StoreWallet(req.body)
 
-        if (!isValid) return res.status(400).json({
+        !isValid ? res.status(400).json({
             success: false,
             msg: `Error Validation`,
             errors
-        })
-
-        newWallet.save()
+        }) : newWallet.save()
             .then( (wallet, err) => {
-                if (err) res.json(err)
+                err && res.json(err)
                 wallet ? res.status(201).json({
                     success: true,
                     msg:`Wallet created`,
@@ -37,7 +35,7 @@ module.exports.Get = (req, res) => {
         _id = req.query.id
 
     _id ? Wallet.findOne({user_id, _id}).then((wallet, err) => {
-        if (err) res.json(err)
+        err && res.json(err)
         wallet ? res.status(200).json({
             success: true,
             msg: `Successfully find user wallet`,
@@ -48,7 +46,7 @@ module.exports.Get = (req, res) => {
             msg: `Failed to find wallet`
         })
     }) : Wallet.find({user_id}).then((wallet, err) => {
-        if (err) res.json(err)
+        err && res.json(err)
         wallet ? res.status(200).json({
             success: true,
             msg: `Successfully find user wallet`,
@@ -67,18 +65,16 @@ module.exports.Delete = (req, res) => {
         _id = req.query.id
 
     Wallet.findOne({user_id, _id}).then((wallet, err) => {
-        if (err) res.json(err)
-        wallet ?
-            Transaction.find({wallet_id: _id}).then((transaction, err) => {
-                if (err) res.json(err)
-                else (transaction.delete())
+        err && res.json(err)
+        wallet ? Transaction.find({wallet_id: _id}).then((transaction, err) => {
+                err && res.json(err)
+                for (let i = 0; i < transaction.length; i++) transaction[i].remove()
                 wallet.delete().then(() => res.status(200).json({
                     success: true,
                     msg: `Successfully delete user wallet`,
                 }))
             })
-        :
-        res.status(400).json({
+        : res.status(400).json({
             success: false,
             msg: `Failed to find wallet`
         })
@@ -99,7 +95,7 @@ module.exports.Edit = (req, res) => {
         { $set: toBeWallet },
         { new: true })
         .then((wallet, err) => {
-        if (err) res.json(err)
+        err && res.json(err)
         res.status(200).json({
             success: true,
             msg: `Successfully update user wallet`,

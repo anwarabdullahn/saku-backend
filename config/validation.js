@@ -72,11 +72,12 @@ module.exports.StoreTransaction = data => {
 module.exports.StoreWallet = data => {
     let errors = {}
     data.name = !isEmpty(data.name) ? data.name : ''
-    data.balance = !isEmpty(data.balance) ? data.balance : ''
-
+    if (data.balance) {
+        data.balance = !isEmpty(data.balance) ? data.balance : ''
+        if (Validator.isEmpty(data.balance)) errors.balance = `Balance is required`
+        if (!Validator.isNumeric(data.balance, {no_symbols: false})) errors.balance = `Balance is numeric`
+    }
     if (Validator.isEmpty(data.name)) errors.name = `Wallet Name is required`
-    if (Validator.isEmpty(data.balance)) errors.balance = `Balance is required`
-    if (!Validator.isNumeric(data.balance, {no_symbols: false})) errors.balance = `Balance is numeric`
     return {
         errors,
         isValid: isEmpty(errors)

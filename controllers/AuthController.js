@@ -11,13 +11,11 @@ module.exports.Register = (req, res) => {
         newUser = new User({ first_name, last_name, email: (email).trim(), phone }),
         { errors, isValid } = Validation.Register(req.body)
 
-    if(!isValid) return res.status(400).json({
+    !isValid ? res.status(400).json({
         success: false,
         msg: `Error Validation`,
         errors
-    })
-
-    User.findOne({ email })
+    }) : User.findOne({ email })
         .then(user => {
         user ? res.status(400).json({
             success: false,
@@ -41,13 +39,11 @@ module.exports.Login = (req, res) => {
         { email, password } = req.body,
         { errors, isValid } = Validation.Login(req.body)
 
-    if (!isValid) return res.status(400).json({
+    !isValid ? res.status(400).json({
         success: false,
         msg: `Error Validation`,
         errors
-    })
-
-    User.findOne({ email })
+    }) : User.findOne({ email })
         .then(user => {
         !user ? res.status(404).json({
             success: false,

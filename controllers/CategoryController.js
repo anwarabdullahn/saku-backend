@@ -5,17 +5,15 @@ const
 module.exports.Store = (req, res) => {
     const
         {name} = req.body,
-        newCategory = new Category({name}),
+        newCategory = new Category({name, user_id: req.user.id}),
         { errors, isValid } = Validation.StoreCategory(req.body)
 
-        if (!isValid) return res.status(400).json({
+        !isValid ? res.status(400).json({
             success: false,
             msg: `Error Validation`,
             errors
-        })
-
-    newCategory.save().then((category, err) => {
-        if (err) res.json(err)
+        }) : newCategory.save().then((category, err) => {
+        err && res.json(err)
         category ? res.status(201).json({
             success: true,
             msg: `Category created`,
@@ -30,10 +28,11 @@ module.exports.Store = (req, res) => {
 
 module.exports.Get = (req, res) => {
     const
+        user_id = req.user.id,
         _id = req.query.id
 
-    _id ? Category.findOne({_id}).then((category, err) => {
-        if (err) res.json(err)
+    _id ? Category.findOne({user_id, _id}).then((category, err) => {
+        err && res.json(err)
         category ? res.status(200).json({
             success: true,
             msg: `Find Category by id`,
@@ -44,7 +43,7 @@ module.exports.Get = (req, res) => {
             msg: `Failed to find Category`
         })
     }) : Category.find().then((category, err) => {
-        if (err) res.json(err)
+        err && res.json(err)
         category ? res.status(200).json({
             success: true,
             msg: `Find Category`,
@@ -64,7 +63,7 @@ module.exports.Delete = (req, res) => {
         _id = req.query.id
 
     Category.findOne({user_id, _id}).then((category, err) => {
-        if (err) res.json(err)
+        err && res.json(err)
         category ? category.delete().then(() => res.status(200).json({
             success: true,
             msg: `Successfully delete category`,
@@ -80,7 +79,7 @@ module.exports.Edit = (req, res) => {
     const
         user_id = req.user.id,
         _id = req.query.id,
-        {name} = req.body,
+        { name } = req.body,
         toBeCategory = {}
 
     if (name) toBeCategory.name = name
@@ -90,11 +89,14 @@ module.exports.Edit = (req, res) => {
         { $set: toBeCategory },
         { new: true })
         .then((category, err) => {
-        if (err) res.json(err)
-        res.status(200).json({
+        err && res.json(err)
+        category ? res.status(200).json({
             success: true,
             msg: `Successfully update user category`,
             result: category
+        }): res.status(400).json({
+            success: false,
+            msg: `Failed to update category`
         })
     })
 }

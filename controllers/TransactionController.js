@@ -8,15 +8,13 @@ module.exports.Store = (req, res) => {
         { wallet_id, category_id, type, desc, amount, date } = req.body,
         newTransaction = new Transaction({ wallet_id, category_id, type, desc, amount}),
         { errors, isValid } = Validation.StoreTransaction(req.body)
-    console.log(amount)
-        if (!isValid) return res.status(400).json({
-            success: false,
-            msg: `Error Validation`,
-            errors
-        })
 
-    Wallet.findById(wallet_id).then((wallet, err) => {
-        if (err) res.json(err)
+    !isValid ? res.status(400).json({
+        success: false,
+        msg: `Error Validation`,
+        errors
+    }) : Wallet.findById(wallet_id).then((wallet, err) => {
+        err && res.json(err)
         if (wallet) {
             if (type == 'Plus') wallet.balance = parseInt(wallet.balance) + parseInt(amount)
             else wallet.balance = parseInt(wallet.balance) - parseInt(amount)
@@ -24,7 +22,7 @@ module.exports.Store = (req, res) => {
             wallet.save().then(()=> {
                 date ? newTransaction.date = new Date(date) : newTransaction.date = new Date()
                 newTransaction.save().then((transaction, err) => {
-                    if (err) res.json(err)
+                    err && res.json(err)
                     res.status(201).json({
                         success: true,
                         msg: `Successfully create Transaction`,
@@ -44,7 +42,7 @@ module.exports.Get = (req, res) => {
         wallet_id = req.query.wallet_id
 
     wallet_id ? Transaction.find({wallet_id}).sort({date: 'desc'}).then((transaction, err) => {
-        if (err) res.json(err)
+        err && res.json(err)
         transaction ? res.status(200).json({
             success: true,
             msg: `Find Transaction by id`,
@@ -58,7 +56,7 @@ module.exports.Get = (req, res) => {
             .populate('wallet_id', ['name'])
             .sort({date: 'desc'})
             .then((transaction, err) => {
-        if (err) res.json(err)
+        err && res.json(err)
         transaction ? res.status(200).json({
             success: true,
             msg: `Find Transaction`,
@@ -109,7 +107,7 @@ module.exports.Edit = (req, res) => {
                     {$set: toBeTransaction},
                     {new: true}
                 ).then((transaction, err) => {
-                    if (err) res.json(err)
+                    err && res.json(err)
                     res.status(200).json({
                         success: true,
                         msg: `Successfully edit transaction`,
