@@ -9,12 +9,10 @@ module.exports.Store = (req, res) => {
 
     Wallet.findById(wallet_id).then((wallet, err) => {
         if (err) res.json(err)
-        if(wallet){
-            if (type == 'Plus') {
-                wallet.balance = parseInt(wallet.balance) + parseInt(amount)
-            } else {
-                wallet.balance = parseInt(wallet.balance) - parseInt(amount)
-            }
+        if (wallet) {
+            if (type == 'Plus') wallet.balance = parseInt(wallet.balance) + parseInt(amount)
+            else wallet.balance = parseInt(wallet.balance) - parseInt(amount)
+
             wallet.save().then(()=> {
                 date ? newTransaction.date = new Date(date) : newTransaction.date = new Date()
                 newTransaction.save().then((transaction, err) => {
@@ -26,12 +24,10 @@ module.exports.Store = (req, res) => {
                     })
                 })
             })
-        } else {
-            res.status(400).json({
-                success: false,
-                msg: `Failed to create Transaction`,
-            })
-        }
+        } else res.status(400).json({
+                    success: false,
+                    msg: `Failed to create Transaction`,
+                })
     })
 }
 

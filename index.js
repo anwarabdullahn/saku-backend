@@ -7,8 +7,11 @@ const
     cors = require('cors'),
     passport = require('passport'),
     routes = require('./routes')
+
 require('./config/passport')(passport)
-const app = express();
+
+const
+    app = express();
 
 app
     .use(bodyParser.json())
