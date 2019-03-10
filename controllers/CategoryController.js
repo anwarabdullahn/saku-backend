@@ -1,10 +1,18 @@
 const
-    Category = require('../models/Category')
+    Category = require('../models/Category'),
+    Validation = require('../config/validation')
 
 module.exports.Store = (req, res) => {
     const
         {name} = req.body,
-        newCategory = new Category({name})
+        newCategory = new Category({name}),
+        { errors, isValid } = Validation.StoreCategory(req.body)
+
+        if (!isValid) return res.status(400).json({
+            success: false,
+            msg: `Error Validation`,
+            errors
+        })
 
     newCategory.save().then((category, err) => {
         if (err) res.json(err)

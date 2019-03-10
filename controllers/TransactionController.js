@@ -1,11 +1,19 @@
 const
     Transaction = require('../models/Transaction'),
-    Wallet = require('../models/Wallet')
+    Wallet = require('../models/Wallet'),
+    Validation = require('../config/validation')
 
 module.exports.Store = (req, res) => {
     const
         { wallet_id, category_id, type, desc, amount, date } = req.body,
-        newTransaction = new Transaction({ wallet_id, category_id, type, desc, amount})
+        newTransaction = new Transaction({ wallet_id, category_id, type, desc, amount}),
+        { errors, isValid } = Validation.StoreTransaction(req.body)
+    console.log(amount)
+        if (!isValid) return res.status(400).json({
+            success: false,
+            msg: `Error Validation`,
+            errors
+        })
 
     Wallet.findById(wallet_id).then((wallet, err) => {
         if (err) res.json(err)
