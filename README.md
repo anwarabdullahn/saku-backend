@@ -10,5 +10,8 @@ This repo contains the backend web server and api
 You can also check the frontend for this apps:
   * [Finance Management]() - Finance Management Mobile (soon)
 
+### Postman for Test
+Collection https://www.getpostman.com/collections/53f561dbe5b1be643a8a
+
 ### License
 Anwar Abdullah N - 2017
