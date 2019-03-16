@@ -8,7 +8,7 @@ const
 module.exports.Register = (req, res) => {
     const
         { first_name, last_name, email, password, phone } = req.body,
-        newUser = new User({ first_name, last_name, email: (email).trim(), phone }),
+        newUser = new User({ first_name, last_name, email, phone }),
         { errors, isValid } = Validation.Register(req.body)
 
     !isValid ? res.status(400).json({
