@@ -1,23 +1,30 @@
 const mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
-const WalletSchema = new Schema({
-	name: {
-		type: String,
-		required: true
+const WalletSchema = new Schema(
+	{
+		name: {
+			type: String,
+			required: true
+		},
+		userId: {
+			type: Schema.Types.ObjectId,
+			ref: 'users'
+		},
+		themeId: {
+			type: Schema.Types.ObjectId,
+			ref: 'users'
+		},
+		balance: {
+			type: Number,
+			default: 0
+		},
+		deletedAt: {
+			type: Date,
+			default: null
+		}
 	},
-	userId: {
-		type: Schema.Types.ObjectId,
-		ref: 'users'
-	},
-	themeId: {
-		type: Schema.Types.ObjectId,
-		ref: 'users'
-	},
-	balance: {
-		type: Number,
-		default: 0
-	}
-});
+	{ timestamps: true }
+);
 
 module.exports = Wallet = mongoose.model('wallets', WalletSchema);
