@@ -52,13 +52,13 @@ module.exports.StoreCategory = (data) => {
 
 module.exports.StoreTransaction = (data) => {
 	let errors = {};
-	data.wallet_id = !isEmpty(data.wallet_id) ? data.wallet_id : '';
-	data.category_id = !isEmpty(data.category_id) ? data.category_id : '';
+	data.walletId = !isEmpty(data.walletId) ? data.walletId : '';
+	data.categoryId = !isEmpty(data.categoryId) ? data.categoryId : '';
 	data.type = !isEmpty(data.type) ? data.type : '';
 	data.amount = !isEmpty(data.amount) ? data.amount : '';
 
-	if (Validator.isEmpty(data.wallet_id)) errors.wallet_id = `Wallet is required`;
-	if (Validator.isEmpty(data.category_id)) errors.category_id = `Category is required`;
+	if (Validator.isEmpty(data.walletId)) errors.walletId = `Wallet is required`;
+	if (Validator.isEmpty(data.categoryId)) errors.categoryId = `Category is required`;
 	if (Validator.isEmpty(data.type)) errors.type = `Type is required`;
 	if (Validator.isEmpty(data.amount)) errors.amount = `Amount is required`;
 	if (!Validator.isNumeric(data.amount, { no_symbols: false })) errors.amount = `Amount is numeric`;

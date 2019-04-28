@@ -5,15 +5,15 @@ const
 
 module.exports.Store = (req, res) => {
     const
-        { wallet_id, category_id, type, desc, amount, date } = req.body,
-        newTransaction = new Transaction({ wallet_id, category_id, type, desc, amount}),
+        { walletId, categoryId, type, desc, amount, date } = req.body,
+        newTransaction = new Transaction({ walletId, categoryId, type, desc, amount}),
         { errors, isValid } = Validation.StoreTransaction(req.body)
 
     !isValid ? res.status(400).json({
         success: false,
         msg: `Error Validation`,
         errors
-    }) : Wallet.findById(wallet_id).then((wallet, err) => {
+    }) : Wallet.findById(walletId).then((wallet, err) => {
         err && res.json(err)
         if (wallet) {
             if (type == 'Plus') wallet.balance = parseInt(wallet.balance) + parseInt(amount)
@@ -39,9 +39,9 @@ module.exports.Store = (req, res) => {
 
 module.exports.Get = (req, res) => {
     const
-        wallet_id = req.query.wallet_id
+        walletId = req.query.walletId
 
-    wallet_id ? Transaction.find({wallet_id}).sort({date: 'desc'}).then((transaction, err) => {
+    walletId ? Transaction.find({walletId}).sort({date: 'desc'}).then((transaction, err) => {
         err && res.json(err)
         transaction ? res.status(200).json({
             success: true,
@@ -53,7 +53,7 @@ module.exports.Get = (req, res) => {
         })
     }): Transaction.find()
             // .select(['desc', '_id'])
-            .populate('wallet_id', ['name'])
+            .populate('walletId', ['name'])
             .sort({date: 'desc'})
             .then((transaction, err) => {
         err && res.json(err)
@@ -70,19 +70,19 @@ module.exports.Get = (req, res) => {
 
 module.exports.Edit = (req, res) => {
     const
-        {wallet_id, id} = req.query,
-        {category_id, type, desc, date, amount} = req.body,
+        {walletId, id} = req.query,
+        {categoryId, type, desc, date, amount} = req.body,
         toBeTransaction = {}
 
-    if (category_id) toBeTransaction.category_id = category_id
+    if (categoryId) toBeTransaction.categoryId = categoryId
     if (type) toBeTransaction.type = type
     if (desc) toBeTransaction.desc = desc
     if (date) toBeTransaction.date = new Date(date)
     if (amount) toBeTransaction.amount = amount
 
-    Wallet.findById(wallet_id).then((wallet, err) => {
+    Wallet.findById(walletId).then((wallet, err) => {
         if(err) res.json(err)
-        wallet ? Transaction.findOne({wallet_id, _id:id}).then((transaction, err) => {
+        wallet ? Transaction.findOne({walletId, _id:id}).then((transaction, err) => {
             if(!transaction){
                 return res.status(400).json({
                     success: false,
@@ -103,7 +103,7 @@ module.exports.Edit = (req, res) => {
 
             wallet.save().then(() => {
                 Transaction.findOneAndUpdate(
-                    {wallet_id, _id:id},
+                    {walletId, _id:id},
                     {$set: toBeTransaction},
                     {new: true}
                 ).then((transaction, err) => {
@@ -126,11 +126,11 @@ module.exports.Edit = (req, res) => {
 
 module.exports.Delete = (req, res) => {
     const
-        {wallet_id, id} = req.query
+        {walletId, id} = req.query
 
-    Wallet.findById(wallet_id).then((wallet, err) => {
+    Wallet.findById(walletId).then((wallet, err) => {
         if(err) res.json(err)
-        wallet ? Transaction.findOne({wallet_id, _id:id}).then((transaction, err) => {
+        wallet ? Transaction.findOne({walletId, _id:id}).then((transaction, err) => {
             if(!transaction){
                 return res.status(400).json({
                     success: false,
@@ -148,7 +148,7 @@ module.exports.Delete = (req, res) => {
 
             wallet.save().then(() => {
                 Transaction.findOneAndRemove(
-                    {wallet_id, _id:id}
+                    {walletId, _id:id}
                 ).then(() => {
                     res.status(200).json({
                         success: true,
