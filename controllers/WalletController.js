@@ -71,10 +71,11 @@ module.exports.Delete = (req, res) => {
 			? Transaction.find({ wallet_id: _id }).then((transaction, err) => {
 					err && res.json(err);
 					for (let i = 0; i < transaction.length; i++) transaction[i].remove();
-					wallet.delete().then(() =>
+					wallet.delete().then((data) =>
 						res.status(200).json({
 							success: true,
-							msg: `Successfully delete user wallet`
+                            msg: `Successfully delete user wallet`,
+                            result: data
 						})
 					);
 				})
