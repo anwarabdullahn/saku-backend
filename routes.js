@@ -6,7 +6,8 @@ const express = require('express'),
 	WalletController = require('./controllers/WalletController'),
 	CategoryController = require('./controllers/CategoryController'),
 	TransactionController = require('./controllers/TransactionController'),
-	checkAuthorization = require('./middleware/authorized');
+	checkAuthorization = require('./middleware/authorized'),
+	checkBalance = require('./middleware/checkBalance');
 
 router
 	.get('/', (req, res) => res.send('Hello World'))
@@ -14,6 +15,7 @@ router
 	// Authentication Routes
 	.post('/register', AuthController.Register)
 	.post('/login', AuthController.Login)
+	.get('/me', privateRouter, checkBalance, AuthController.Me)
 
 	// Category Routes
 	.post('/category', privateRouter, CategoryController.Store)

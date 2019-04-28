@@ -78,7 +78,7 @@ module.exports.StoreWallet = (data) => {
 		if (!Validator.isNumeric(data.balance, { no_symbols: false })) errors.balance = `Balance is numeric`;
 	}
 	if (Validator.isEmpty(data.name)) errors.name = `Wallet Name is required`;
-	if (Validator.isEmpty(data.themeId)) errors.themeId = `Wallet Themes is required`;
+	// if (Validator.isEmpty(data.themeId)) errors.themeId = `Wallet Themes is required`;
 	return {
 		errors,
 		isValid: isEmpty(errors)
