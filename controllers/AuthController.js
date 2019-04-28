@@ -98,30 +98,65 @@ module.exports.AdminRegister = (req, res) => {
 
 	!isValid
 		? res.status(400).json({
-			success: false,
-			msg: `Error Validation`,
-			errors
-		})
+				success: false,
+				msg: `Error Validation`,
+				errors
+			})
 		: Admin.findOne({ email })
-			.then(
-				(admin) =>
-					admin
-						? res.status(400).json({
-							success: false,
-							msg: `Email already exist`
-						})
-						: bcrypt.genSalt(10, (err, salt) => {
-							bcrypt.hash(password, salt, (err, hash) => {
-								newAdmin.password = hash;
-								newAdmin.save().then((data) => {
-									res.status(201).json({
-										success: true,
-										msg: `Register Success`,
-										result: data
+				.then(
+					(admin) =>
+						admin
+							? res.status(400).json({
+									success: false,
+									msg: `Email already exist`
+								})
+							: bcrypt.genSalt(10, (err, salt) => {
+									bcrypt.hash(password, salt, (err, hash) => {
+										newAdmin.password = hash;
+										newAdmin.save().then((data) => {
+											res.status(201).json({
+												success: true,
+												msg: `Register Success`,
+												result: data
+											});
+										});
 									});
-								});
+								})
+				)
+				.catch((err) => res.status(400).json(err));
+};
+
+module.exports.AdminLogin = (req, res) => {
+	const { email, password } = req.body,
+		{ errors, isValid } = Validation.Login(req.body);
+
+	!isValid
+		? res.status(400).json({
+				success: false,
+				msg: `Error Validation`,
+				errors
+			})
+		: Admin.findOne({ email })
+				.then((admin) => {
+					!admin
+						? res.status(404).json({
+								success: false,
+								msg: `User not found`
+							})
+						: bcrypt.compare(password, admin.password).then((match) => {
+								const payload = { id: admin._id, email };
+								!match
+									? res.status(400).json({
+											success: false,
+											msg: `Inccorect Password`
+										})
+									: jwt.sign(payload, secret, (err, token) =>
+											res.json({
+												success: true,
+												token: 'Bearer ' + token
+											})
+										);
 							});
-						})
-			)
-			.catch((err) => res.status(400).json(err));
+				})
+				.catch((err) => res.status(400).json(err));
 };
