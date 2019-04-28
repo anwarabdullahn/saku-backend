@@ -43,7 +43,7 @@ module.exports.Edit = (req, res) => {
 		toBeTheme = {};
 
 	if (name) toBeTheme.name = name;
-	if (image) toBeTheme.image = req.file.url;
+	if (req.file) toBeTheme.image = req.file.url;
 
 	Theme.findOneAndUpdate({ _id }, { $set: toBeTheme }, { new: true }).then((theme, err) => {
 		err && res.json(err);
@@ -68,7 +68,8 @@ module.exports.Delete = (req, res) => {
 		theme
 			? res.status(200).json({
 					success: true,
-					msg: `Successfully delete Theme`
+					msg: `Successfully delete Theme`,
+					result: theme
 				})
 			: res.status(400).json({
 					success: false,
