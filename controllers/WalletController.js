@@ -33,7 +33,7 @@ module.exports.Get = (req, res) => {
 		_id = req.query.id;
 
 	_id
-		? Wallet.findOne({ userId, _id }).then((wallet, err) => {
+        ? Wallet.findOne({ userId, _id }).then((wallet, err) => {
 				err && res.json(err);
 				wallet
 					? res.status(200).json({
@@ -46,7 +46,7 @@ module.exports.Get = (req, res) => {
 							msg: `Failed to find wallet`
 						});
 			})
-		: Wallet.find({ userId:userId }).then((wallet, err) => {
+        : Wallet.find({ userId: userId }).sort({ createdAt: -1 }).then((wallet, err) => {
 				err && res.json(err);
 				wallet
 					? res.status(200).json({
