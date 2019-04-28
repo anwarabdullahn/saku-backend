@@ -31,7 +31,7 @@ module.exports.Register = (req, res) => {
 											res.status(201).json({
 												success: true,
 												msg: `Register Success`,
-												data: userNew
+												result: userNew
 											});
 										});
 									});

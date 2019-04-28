@@ -6,6 +6,8 @@ const express = require('express'),
 	WalletController = require('./controllers/WalletController'),
 	CategoryController = require('./controllers/CategoryController'),
 	TransactionController = require('./controllers/TransactionController'),
+	UserController = require('./controllers/UserController'),
+	multer = require('./config/multerCloudinary'),
 	checkAuthorization = require('./middleware/authorized'),
 	checkBalance = require('./middleware/checkBalance');
 
@@ -16,6 +18,8 @@ router
 	.post('/register', AuthController.Register)
 	.post('/login', AuthController.Login)
 	.get('/me', privateRouter, checkBalance, AuthController.Me)
+	.put('/', privateRouter, multer.single('avatar'), UserController.UpdateUser)
+
 
 	// Category Routes
 	.post('/category', privateRouter, CategoryController.Store)
