@@ -11,7 +11,7 @@ module.exports.UpdateUser = (req, res) => {
 	if (last_name) toBeUser.last_name = last_name;
 	if (email) toBeUser.email = email;
 	if (phone) toBeUser.phone = phone;
-	if (avatar) toBeUser.avatar = avatar;
+	if (req.file) toBeUser.avatar = req.file.url;
 
 	password
 		? Bcrypt(_id, password, oldPassword)

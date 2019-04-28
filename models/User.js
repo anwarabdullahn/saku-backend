@@ -22,10 +22,12 @@ const UserSchema = new Schema(
 			type: String
 		},
 		pin: {
-			type: Number
+			type: Number,
+			default: null
 		},
 		avatar: {
-			type: String
+			type: String,
+			default: null
 		},
 		balance: {
 			type: Number,
