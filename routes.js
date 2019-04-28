@@ -20,7 +20,6 @@ router
 	.get('/me', privateRouter, checkBalance, AuthController.Me)
 	.put('/', privateRouter, multer.single('avatar'), UserController.UpdateUser)
 
-
 	// Category Routes
 	.post('/category', privateRouter, CategoryController.Store)
 	.get('/category', privateRouter, checkAuthorization, CategoryController.Get)

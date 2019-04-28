@@ -26,6 +26,21 @@ module.exports.Register = (data) => {
 	};
 };
 
+module.exports.AdminRegister = (data) => {
+	let errors = {};
+	data.name = !isEmpty(data.name) ? data.name : '';
+	data.password = !isEmpty(data.password) ? data.password : '';
+	data.email = !isEmpty(data.email) ? data.email : '';
+
+	if (!Validator.isEmail(data.email)) errors.email = `Must be correct email type`;
+	if (Validator.isEmpty(data.name)) errors.name = `Name is required`;
+	if (Validator.isEmpty(data.password)) errors.password = `Password is required`;
+	return {
+		errors,
+		isValid: isEmpty(errors)
+	};
+};
+
 module.exports.Login = (data) => {
 	let errors = {};
 	data.email = !isEmpty(data.email) ? data.email : '';

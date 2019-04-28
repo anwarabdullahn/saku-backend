@@ -1,5 +1,5 @@
 const User = require('../models/User'),
-	Wallet = require('../models/Wallet'),
+	Admin = require('../models/Admin'),
 	bcrypt = require('bcryptjs'),
 	jwt = require('jsonwebtoken'),
 	secret = process.env.SECRET,
@@ -89,4 +89,39 @@ module.exports.Me = (req, res) => {
 			});
 		})
 		.catch((err) => res.status(400).json(err));
+};
+
+module.exports.AdminRegister = (req, res) => {
+	const { name, email, password } = req.body,
+		newAdmin = new Admin({ name, email }),
+		{ errors, isValid } = Validation.AdminRegister(req.body);
+
+	!isValid
+		? res.status(400).json({
+			success: false,
+			msg: `Error Validation`,
+			errors
+		})
+		: Admin.findOne({ email })
+			.then(
+				(admin) =>
+					admin
+						? res.status(400).json({
+							success: false,
+							msg: `Email already exist`
+						})
+						: bcrypt.genSalt(10, (err, salt) => {
+							bcrypt.hash(password, salt, (err, hash) => {
+								newAdmin.password = hash;
+								newAdmin.save().then((data) => {
+									res.status(201).json({
+										success: true,
+										msg: `Register Success`,
+										result: data
+									});
+								});
+							});
+						})
+			)
+			.catch((err) => res.status(400).json(err));
 };
