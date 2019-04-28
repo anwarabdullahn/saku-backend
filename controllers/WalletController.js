@@ -85,10 +85,11 @@ module.exports.Edit = (req, res) => {
     const
         user_id = req.user.id,
         _id = req.query.id,
-        {name} = req.body,
+        {name, themeId} = req.body,
         toBeWallet = {}
 
     if (name) toBeWallet.name = name
+    if (themeId) toBeWallet.themeId = themeId
 
     Wallet.findOneAndUpdate(
         { user_id, _id },
