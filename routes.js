@@ -9,7 +9,7 @@ const express = require('express'),
 	TransactionController = require('./controllers/TransactionController'),
 	UserController = require('./controllers/UserController'),
 	multer = require('./config/multerCloudinary'),
-	checkAuthorization = require('./middleware/authorized'),
+	checkAuthorization = require('./middleware/Authorized'),
 	isAdmin = require('./middleware/isAdmin'),
 	checkBalance = require('./middleware/checkBalance');
 
