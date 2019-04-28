@@ -5,10 +5,12 @@ const express = require('express'),
 	AuthController = require('./controllers/AuthController'),
 	WalletController = require('./controllers/WalletController'),
 	CategoryController = require('./controllers/CategoryController'),
+	ThemeController = require('./controllers/ThemeController'),
 	TransactionController = require('./controllers/TransactionController'),
 	UserController = require('./controllers/UserController'),
 	multer = require('./config/multerCloudinary'),
 	checkAuthorization = require('./middleware/authorized'),
+	isAdmin = require('./middleware/isAdmin'),
 	checkBalance = require('./middleware/checkBalance');
 
 router
@@ -17,6 +19,8 @@ router
 	// Authentication Routes
 	.post('/register', AuthController.Register)
 	.post('/login', AuthController.Login)
+	.post('/admin/register', AuthController.AdminRegister)
+	.post('/admin/login', AuthController.AdminLogin)
 	.get('/me', privateRouter, checkBalance, AuthController.Me)
 	.put('/', privateRouter, multer.single('avatar'), UserController.UpdateUser)
 
@@ -36,6 +40,14 @@ router
 	.post('/transaction', privateRouter, TransactionController.Store)
 	.get('/transaction', privateRouter, TransactionController.Get)
 	.put('/transaction', privateRouter, TransactionController.Edit)
-	.delete('/transaction', privateRouter, TransactionController.Delete);
+	.delete('/transaction', privateRouter, TransactionController.Delete)
+
+	// Theme Routes
+	.post('/theme', privateRouter, isAdmin, ThemeController.Store)
+	.get('/theme', privateRouter, checkAuthorization, ThemeController.Get)
+	.put('/theme', privateRouter, ThemeController.Edit)
+	.delete('/theme', privateRouter, ThemeController.Delete)
+
+
 
 module.exports = router;

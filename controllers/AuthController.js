@@ -58,7 +58,7 @@ module.exports.Login = (req, res) => {
 								msg: `User not found`
 							})
 						: bcrypt.compare(password, user.password).then((match) => {
-								const payload = { id: user.id, email };
+								const payload = { id: user.id, email, role: 'user' };
 								!match
 									? res.status(400).json({
 											success: false,
@@ -144,7 +144,7 @@ module.exports.AdminLogin = (req, res) => {
 								msg: `User not found`
 							})
 						: bcrypt.compare(password, admin.password).then((match) => {
-								const payload = { id: admin._id, email };
+								const payload = { id: admin._id, email, role: 'admin' };
 								!match
 									? res.status(400).json({
 											success: false,
