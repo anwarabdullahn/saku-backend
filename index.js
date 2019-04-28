@@ -20,6 +20,6 @@ app
 	.listen(process.env.PORT, () => console.log(`Online at Port ${process.env.PORT}`));
 
 mongoose
-	.connect(process.env.MONGO_DB, { useNewUrlParser: true })
+	.connect(process.env.E_MONGO_DB, { useNewUrlParser: true })
 	.then(() => console.log(`MongoDB Connected`))
 	.catch((err) => console.log(err));
