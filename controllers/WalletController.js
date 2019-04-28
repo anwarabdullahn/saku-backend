@@ -3,8 +3,10 @@ const Wallet = require('../models/Wallet'),
 	Validation = require('../config/validation');
 
 module.exports.Store = (req, res) => {
-	const { name, balance, themeId } = req.body,
-		newWallet = new Wallet({ name, balance, userId: req.user._id, themeId }),
+	let firstSaldo = 0,
+		{ name, balance, themeId } = req.body;
+	if (balance) firstSaldo = balance;
+	const newWallet = new Wallet({ name, balance, userId: req.user._id, themeId, firstSaldo }),
 		{ errors, isValid } = Validation.StoreWallet(req.body);
 
 	!isValid
@@ -33,7 +35,7 @@ module.exports.Get = (req, res) => {
 		_id = req.query.id;
 
 	_id
-        ? Wallet.findOne({ userId, _id }).then((wallet, err) => {
+		? Wallet.findOne({ userId, _id }).then((wallet, err) => {
 				err && res.json(err);
 				wallet
 					? res.status(200).json({
@@ -46,7 +48,7 @@ module.exports.Get = (req, res) => {
 							msg: `Failed to find wallet`
 						});
 			})
-        : Wallet.find({ userId: userId }).sort({ createdAt: -1 }).then((wallet, err) => {
+		: Wallet.find({ userId: userId }).sort({ createdAt: -1 }).then((wallet, err) => {
 				err && res.json(err);
 				wallet
 					? res.status(200).json({
@@ -74,8 +76,8 @@ module.exports.Delete = (req, res) => {
 					wallet.delete().then((data) =>
 						res.status(200).json({
 							success: true,
-                            msg: `Successfully delete user wallet`,
-                            result: data
+							msg: `Successfully delete user wallet`,
+							result: data
 						})
 					);
 				})

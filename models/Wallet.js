@@ -19,6 +19,10 @@ const WalletSchema = new Schema(
 			type: Number,
 			default: 0
 		},
+		firstSaldo: {
+			type: Number,
+			default: 0
+		},
 		deletedAt: {
 			type: Date,
 			default: null
