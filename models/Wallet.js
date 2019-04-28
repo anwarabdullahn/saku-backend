@@ -13,7 +13,7 @@ const WalletSchema = new Schema(
 		},
 		themeId: {
 			type: Schema.Types.ObjectId,
-			ref: 'users'
+			ref: 'themes'
 		},
 		balance: {
 			type: Number,

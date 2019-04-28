@@ -6,8 +6,8 @@ const
 
 module.exports.Store = (req, res) => {
     const
-        { name, balance } = req.body,
-        newWallet = new Wallet({ name, balance, user_id: req.user.id}),
+        { name, balance, themeId} = req.body,
+        newWallet = new Wallet({ name, balance, user_id: req.user.id, themeId}),
         { errors, isValid } = Validation.StoreWallet(req.body)
 
         !isValid ? res.status(400).json({
