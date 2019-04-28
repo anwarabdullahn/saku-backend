@@ -17,7 +17,7 @@ app
 	.use(cors())
 	.use(bodyParser.urlencoded({ extended: false }))
 	.use('/api', routes)
-	.listen(process.env.PORT, () => console.log(`Online at Port ${process.env.PORT}`));
+	.listen(process.env.PORT || 5000, () => console.log(`Online at Port ${process.env.PORT || 5000}`));
 
 mongoose
 	.connect(process.env.E_MONGO_DB, { useNewUrlParser: true })
