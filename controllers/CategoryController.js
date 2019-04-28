@@ -6,7 +6,7 @@ module.exports.Store = (req, res) => {
     const
         {name} = req.body,
         newCategory = new Category({name, user_id: req.user.id}),
-        { errors, isValid } = Validation.StoreCategory(req.body)
+        { errors, isValid } = Validation.StoreNameOnly(req.body)
 
         !isValid ? res.status(400).json({
             success: false,

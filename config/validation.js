@@ -54,17 +54,6 @@ module.exports.Login = (data) => {
 	};
 };
 
-module.exports.StoreCategory = (data) => {
-	let errors = {};
-	data.name = !isEmpty(data.name) ? data.name : '';
-
-	if (Validator.isEmpty(data.name)) errors.name = `Category Name is required`;
-	return {
-		errors,
-		isValid: isEmpty(errors)
-	};
-};
-
 module.exports.StoreTransaction = (data) => {
 	let errors = {};
 	data.walletId = !isEmpty(data.walletId) ? data.walletId : '';
@@ -94,6 +83,19 @@ module.exports.StoreWallet = (data) => {
 	}
 	if (Validator.isEmpty(data.name)) errors.name = `Wallet Name is required`;
 	// if (Validator.isEmpty(data.themeId)) errors.themeId = `Wallet Themes is required`;
+	return {
+		errors,
+		isValid: isEmpty(errors)
+	};
+};
+
+
+
+module.exports.StoreNameOnly = (data) => {
+	let errors = {};
+	data.name = !isEmpty(data.name) ? data.name : '';
+
+	if (Validator.isEmpty(data.name)) errors.name = `Name is required`;
 	return {
 		errors,
 		isValid: isEmpty(errors)
